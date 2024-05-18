@@ -2,6 +2,7 @@ db: # Run Postgres
 	docker run -d --rm \
 	-p 5432:5432 \
 	--name postgres \
+	-e POSTGRES_USER=devUser \
 	-e POSTGRES_PASSWORD=devPassword \
 	-e POSTGRES_DB=library_db \
 	-e TZ=Asia/Manila \
