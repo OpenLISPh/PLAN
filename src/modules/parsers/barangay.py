@@ -133,6 +133,6 @@ def transform_df(orig_df):
     return df_bgy
 
 
-def convert_xlsx_to_df(xlsx_file):
-    psgc_df = pd.read_excel(xlsx_file, sheet_name="PSGC", dtype=str)
-    return psgc_df
+def load_psgc_data(file_path):
+    data_frame = pd.read_excel(file_path, sheet_name="PSGC", dtype=str)
+    return data_frame
