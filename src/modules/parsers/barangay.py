@@ -61,3 +61,78 @@ def generate_geographic_code_mappings(orig_df):
     )
 
     return region_mapping, province_mapping, municipality_city_mapping
+
+
+def transform_df(orig_df):
+    orig_df["10-digit PSGC"] = orig_df["10-digit PSGC"].astype(
+        str
+    )  # Ensure '10-digit PSGC' is string type
+
+    # Generate mappings
+    region_mapping, province_mapping, municipality_city_mapping = (
+        generate_geographic_code_mappings(orig_df)
+    )
+
+    # Filter to only include barangays
+    df_bgy = orig_df[orig_df["Geographic Level"] == "Bgy"].copy()
+
+    # Generate codes for lookup
+    df_bgy["Region Code"] = df_bgy["10-digit PSGC"].str[:2] + "00000000"
+    df_bgy["Province Code"] = df_bgy["10-digit PSGC"].str[:5] + "00000"
+    df_bgy["Municipality / City Code"] = df_bgy["10-digit PSGC"].str[:7] + "000"
+
+    # Merge to assign names
+    df_bgy = df_bgy.merge(region_mapping, how="left", on="Region Code")
+    df_bgy = df_bgy.merge(province_mapping, how="left", on="Province Code")
+    df_bgy = df_bgy.merge(
+        municipality_city_mapping, how="left", on="Municipality / City Code"
+    )
+
+    # Rename columns
+    df_bgy.rename(
+        columns={
+            "Region Name": "Region",
+            "Province Name": "Province",
+            "Municipality / City Name": "Municipality / City",
+        },
+        inplace=True,
+    )
+
+    # Drop extra columns
+    df_bgy.drop(
+        ["Region Code", "Province Code", "Municipality / City Code"], axis=1, inplace=True
+    )
+
+    # Drop columns where column names start with 'Unnamed'
+    df_bgy = df_bgy.loc[:, ~df_bgy.columns.str.contains("^Unnamed")]
+
+    # Create address column
+    df_bgy["Address"] = df_bgy.apply(
+        lambda row: ", ".join(
+            filter(
+                None,
+                [
+                    (
+                        str(row["Name"]) + " Barangay Hall"
+                        if pd.notnull(row["Name"])
+                        else ""
+                    ),
+                    (
+                        str(row["Municipality / City"])
+                        if pd.notnull(row["Municipality / City"])
+                        else ""
+                    ),
+                    str(row["Province"]) if pd.notnull(row["Province"]) else "",
+                    str(row["Region"]) if pd.notnull(row["Region"]) else "",
+                ],
+            )
+        ),
+        axis=1,
+    )
+
+    return df_bgy
+
+
+def convert_xlsx_to_df(xlsx_file):
+    psgc_df = pd.read_excel(xlsx_file, sheet_name="PSGC", dtype=str)
+    return psgc_df
