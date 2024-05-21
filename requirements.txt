@@ -24,6 +24,8 @@ click==8.1.7
     # via streamlit
 distlib==0.3.8
     # via virtualenv
+et-xmlfile==1.1.0
+    # via openpyxl
 filelock==3.14.0
     # via virtualenv
 gitdb==4.0.11
@@ -59,6 +61,8 @@ numpy==1.26.4
     #   pyarrow
     #   pydeck
     #   streamlit
+openpyxl==3.1.2
+    # via -r requirements.in
 packaging==24.0
     # via
     #   altair

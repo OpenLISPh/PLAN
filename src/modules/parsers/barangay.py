@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def generate_geographic_code_mappings(orig_df):
+def _generate_geographic_code_mappings(orig_df):
     # Create mappings for region, province, and municipality/city
     region_mapping = orig_df[orig_df["Geographic Level"] == "Reg"].copy()
     province_mapping = orig_df[orig_df["Geographic Level"] == "Prov"].copy()
@@ -70,7 +70,7 @@ def transform_df(orig_df):
 
     # Generate mappings
     region_mapping, province_mapping, municipality_city_mapping = (
-        generate_geographic_code_mappings(orig_df)
+        _generate_geographic_code_mappings(orig_df)
     )
 
     # Filter to only include barangays
@@ -133,6 +133,6 @@ def transform_df(orig_df):
     return df_bgy
 
 
-def load_psgc_data(file_path):
+def read_psgc_excel_data(file_path):
     data_frame = pd.read_excel(file_path, sheet_name="PSGC", dtype=str)
     return data_frame
