@@ -1,10 +1,11 @@
 # pages\01_barangay.py
 import streamlit as st
 
-from modules.controllers.database import PostgresCRUD
+from modules.clients import POSTGRES_CLIENT
 from modules.parsers.barangay import read_psgc_excel_data, transform_df
+from modules.streamlit_elements.buttons import create_table, delete_table, update_table
 
-POSTGRES_CLIENT = PostgresCRUD()
+POSTGRES_CLIENT = POSTGRES_CLIENT
 
 
 # Streamlit page setup
@@ -15,16 +16,23 @@ with st.expander("Help"):
 
 
 try:
+    # Read barangay table from database
     barangay_df = POSTGRES_CLIENT.read_table("barangay")
-    st.dataframe(barangay_df)
+
+    # Display editable dataframe
+    edited_barangay_df = st.data_editor(barangay_df, key="barangay_data_editor")
+
+    unsaved_changes = len(st.session_state.barangay_data_editor["edited_rows"])
+    if unsaved_changes > 0:
+        st.info(f"You have {unsaved_changes} unsaved changes.")
+
+    # button to update table
+    if st.button("Update Table"):
+        update_table(edited_barangay_df)
+
     # button to delete table
     if st.button("Delete Table"):
-        try:
-            POSTGRES_CLIENT.delete_table("barangay")
-            st.success("Table deleted successfully!")
-            st.rerun()
-        except Exception as e:
-            st.error(f"An error occurred while deleting the table: '{e}'")
+        delete_table("barangay")
 
     # delete converted_barangay_df if exists in session state
     if "converted_barangay_df" in st.session_state:
@@ -53,7 +61,4 @@ if "converted_barangay_df" in st.session_state:
     st.dataframe(st.session_state.processed_barangay_df)
 
     if st.button("Save to Database"):
-        # POSTGRES_CLIENT.create_table("barangay", st.session_state.processed_barangay_df)
-        POSTGRES_CLIENT.create_table("barangay", st.session_state.processed_barangay_df)
-        st.success("Table saved successfully!")
-        st.rerun()
+        create_table("barangay", st.session_state.processed_barangay_df)

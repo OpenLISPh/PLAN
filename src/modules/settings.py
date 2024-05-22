@@ -7,7 +7,7 @@ env_path = os.path.join(PROJECT_ROOT, ".env")
 
 # Check if .env file exists
 if not os.path.exists(env_path):
-    raise FileNotFoundError(f"Missing .env file at {env_path}")
+    raise FileNotFoundError(f"Missing .env file at root {env_path}")
 
 # Load .env file
 load_dotenv()
