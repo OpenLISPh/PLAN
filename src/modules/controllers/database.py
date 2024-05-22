@@ -1,18 +1,17 @@
 import logging
-import os
 
 import pandas as pd
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
-load_dotenv()
-logging.basicConfig(level=logging.DEBUG)
+from modules.settings import DATABASE_URL
+
+logging.basicConfig(level=logging.INFO)
 
 
 class PostgresCRUD:
     def __init__(self):
-        database_url = os.getenv("DATABASE_URL")
+        database_url = DATABASE_URL
         self.engine = create_engine(database_url)
 
     def create_table(self, table_name, df):
