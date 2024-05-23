@@ -24,6 +24,8 @@ click==8.1.7
     # via streamlit
 distlib==0.3.8
     # via virtualenv
+distro==1.9.0
+    # via tabula-py
 et-xmlfile==1.1.0
     # via openpyxl
 filelock==3.14.0
@@ -61,6 +63,7 @@ numpy==1.26.4
     #   pyarrow
     #   pydeck
     #   streamlit
+    #   tabula-py
 openpyxl==3.1.2
     # via -r requirements.in
 packaging==24.0
@@ -71,6 +74,7 @@ pandas==2.2.2
     # via
     #   altair
     #   streamlit
+    #   tabula-py
 pillow==10.3.0
     # via streamlit
 platformdirs==4.2.2
@@ -114,6 +118,8 @@ smmap==5.0.1
 sqlalchemy==2.0.30
     # via -r requirements.in
 streamlit==1.34.0
+    # via -r requirements.in
+tabula-py==2.9.3
     # via -r requirements.in
 tenacity==8.3.0
     # via streamlit
