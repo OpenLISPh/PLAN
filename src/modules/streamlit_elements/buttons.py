@@ -1,8 +1,28 @@
+import pandas as pd
 import streamlit as st
 
 from modules.clients import POSTGRES_CLIENT
 
 POSTGRES_CLIENT = POSTGRES_CLIENT
+
+
+@st.experimental_dialog("Update Table")
+def update_table_modal(table_name, df, changes: dict):
+    st.write(
+        f"Are you sure you want to save {len(changes)} changes "
+        f"to the table '{table_name}'?"
+    )
+    changes_df = pd.DataFrame.from_dict(changes, orient="index")
+    st.write(changes_df)
+    if st.button("Confirm"):
+        update_table(df)
+
+
+@st.experimental_dialog("Delete Table")
+def delete_table_modal(table_name):
+    st.write(f"Are you sure you want to delete the table '{table_name}'?")
+    if st.button("Confirm"):
+        delete_table(table_name)
 
 
 def update_table(df):

@@ -3,7 +3,11 @@ import streamlit as st
 
 from modules.clients import POSTGRES_CLIENT
 from modules.parsers.barangay import read_psgc_excel_data, transform_df
-from modules.streamlit_elements.buttons import create_table, delete_table, update_table
+from modules.streamlit_elements.buttons import (
+    create_table,
+    delete_table_modal,
+    update_table_modal,
+)
 
 POSTGRES_CLIENT = POSTGRES_CLIENT
 
@@ -22,17 +26,17 @@ try:
     # Display editable dataframe
     edited_barangay_df = st.data_editor(barangay_df, key="barangay_data_editor")
 
-    unsaved_changes = len(st.session_state.barangay_data_editor["edited_rows"])
-    if unsaved_changes > 0:
-        st.info(f"You have {unsaved_changes} unsaved changes.")
+    unsaved_changes = st.session_state.barangay_data_editor["edited_rows"]
+    if len(unsaved_changes) > 0:
+        st.info(f"You have {len(unsaved_changes)} unsaved changes.")
 
     # button to update table
     if st.button("Update Table"):
-        update_table(edited_barangay_df)
+        update_table_modal("barangay", edited_barangay_df, unsaved_changes)
 
     # button to delete table
     if st.button("Delete Table"):
-        delete_table("barangay")
+        delete_table_modal("barangay")
 
     # delete converted_barangay_df if exists in session state
     if "converted_barangay_df" in st.session_state:
