@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from streamlit_extras.row import row
 
 from modules.clients import POSTGRES_CLIENT
 
@@ -14,15 +15,19 @@ def update_table_modal(table_name, df, changes: dict):
     )
     changes_df = pd.DataFrame.from_dict(changes, orient="index")
     st.write(changes_df)
-    if st.button("Confirm"):
-        update_table(df)
+    confirm_row = row(1, vertical_align="center")
+    confirm_row.button(
+        "Confirm", on_click=update_table, args=(df,), use_container_width=True
+    )
 
 
 @st.experimental_dialog("Delete Table")
 def delete_table_modal(table_name):
     st.write(f"Are you sure you want to delete the table '{table_name}'?")
-    if st.button("Confirm"):
-        delete_table(table_name)
+    delete_row = row(1, vertical_align="center")
+    delete_row.button(
+        "Confirm", on_click=delete_table, args=(table_name,), use_container_width=True
+    )
 
 
 def update_table(df):
