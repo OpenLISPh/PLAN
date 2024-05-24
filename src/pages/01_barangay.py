@@ -7,6 +7,7 @@ from modules.parsers.barangay import read_psgc_excel_data, transform_df
 from modules.streamlit_elements.buttons import (
     create_table,
     delete_table_modal,
+    geocode_table_modal,
     update_table_modal,
 )
 
@@ -31,15 +32,15 @@ try:
     if len(unsaved_changes) > 0:
         st.info(f"You have {len(unsaved_changes)} unsaved changes.")
 
-    table_buttons_row = row(2, vertical_align="center")
+    table_buttons_row = row(3, vertical_align="center")
     table_buttons_row.button(
-        "Delete Table",
+        ":wastebasket: Delete Table",
         on_click=delete_table_modal,
         args=("barangay",),
         use_container_width=True,
     )
     table_buttons_row.button(
-        "Update Table",
+        ":floppy_disk: Update Table",
         on_click=update_table_modal,
         args=(
             "barangay",
@@ -48,7 +49,12 @@ try:
         ),
         use_container_width=True,
     )
-
+    table_buttons_row.button(
+        ":earth_asia: Geocode Table",
+        on_click=geocode_table_modal,
+        args=("barangay",),
+        use_container_width=True,
+    )
     # delete converted_barangay_df if exists in session state
     if "converted_barangay_df" in st.session_state:
         del st.session_state["converted_barangay_df"]

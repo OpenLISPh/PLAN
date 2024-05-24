@@ -17,16 +17,34 @@ def update_table_modal(table_name, df, changes: dict):
     st.write(changes_df)
     confirm_row = row(1, vertical_align="center")
     confirm_row.button(
-        "Confirm", on_click=update_table, args=(df,), use_container_width=True
+        ":heavy_check_mark: Confirm",
+        on_click=update_table,
+        args=(df,),
+        use_container_width=True,
     )
 
 
 @st.experimental_dialog("Delete Table")
 def delete_table_modal(table_name):
     st.write(f"Are you sure you want to delete the table '{table_name}'?")
-    delete_row = row(1, vertical_align="center")
-    delete_row.button(
-        "Confirm", on_click=delete_table, args=(table_name,), use_container_width=True
+    confirm_row = row(1, vertical_align="center")
+    confirm_row.button(
+        ":heavy_check_mark: Confirm",
+        on_click=delete_table,
+        args=(table_name,),
+        use_container_width=True,
+    )
+
+
+@st.experimental_dialog("Geocode Table")
+def geocode_table_modal(table_name):
+    st.write(f"Are you sure you want to geocode the table '{table_name}'?")
+    confirm_row = row(1, vertical_align="center")
+    confirm_row.button(
+        ":heavy_check_mark: Confirm",
+        on_click=geocode_table,
+        args=(table_name,),
+        use_container_width=True,
     )
 
 
@@ -55,3 +73,7 @@ def create_table(table_name, df):
         st.rerun()
     except Exception as e:
         st.error(f"An error occurred while saving the table: '{e}'")
+
+
+def geocode_table(table_name):
+    pass
