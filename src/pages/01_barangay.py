@@ -1,5 +1,6 @@
 # pages\01_barangay.py
 import streamlit as st
+from streamlit_extras.row import row
 
 from modules.clients import POSTGRES_CLIENT
 from modules.parsers.barangay import read_psgc_excel_data, transform_df
@@ -30,13 +31,23 @@ try:
     if len(unsaved_changes) > 0:
         st.info(f"You have {len(unsaved_changes)} unsaved changes.")
 
-    # button to update table
-    if st.button("Update Table"):
-        update_table_modal("barangay", edited_barangay_df, unsaved_changes)
-
-    # button to delete table
-    if st.button("Delete Table"):
-        delete_table_modal("barangay")
+    table_buttons_row = row(2, vertical_align="center")
+    table_buttons_row.button(
+        "Delete Table",
+        on_click=delete_table_modal,
+        args=("barangay",),
+        use_container_width=True,
+    )
+    table_buttons_row.button(
+        "Update Table",
+        on_click=update_table_modal,
+        args=(
+            "barangay",
+            edited_barangay_df,
+            unsaved_changes,
+        ),
+        use_container_width=True,
+    )
 
     # delete converted_barangay_df if exists in session state
     if "converted_barangay_df" in st.session_state:

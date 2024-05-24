@@ -1,5 +1,6 @@
 # pages\02_library.py
 import streamlit as st
+from streamlit_extras.row import row
 
 from modules.clients import POSTGRES_CLIENT
 from modules.parsers.library import read_nlp_pdf_to_df
@@ -29,15 +30,24 @@ try:
     if unsaved_changes:
         st.info(f"You have {len(unsaved_changes)} unsaved changes.")
 
-    # button to update table
-    if st.button("Update Table"):
-        update_table_modal("library", edited_library_df, unsaved_changes)
+    table_buttons_row = row(2, vertical_align="center")
+    table_buttons_row.button(
+        "Delete Table",
+        on_click=delete_table_modal,
+        args=("library",),
+        use_container_width=True,
+    )
+    table_buttons_row.button(
+        "Update Table",
+        on_click=update_table_modal,
+        args=(
+            "library",
+            edited_library_df,
+            unsaved_changes,
+        ),
+        use_container_width=True,
+    )
 
-    # button to delete table
-    if st.button("Delete Table"):
-        delete_table_modal("library")
-
-    # delete something in session state?
     if "processed_library_df" in st.session_state:
         del st.session_state["processed_library_df"]
 except ValueError as e:
