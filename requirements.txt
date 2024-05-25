@@ -42,7 +42,7 @@ favicon==0.7.0
     # via markdownlit
 filelock==3.14.0
     # via virtualenv
-fonttools==4.51.0
+fonttools==4.52.1
     # via matplotlib
 geographiclib==2.0
     # via geopy
@@ -184,10 +184,13 @@ sqlalchemy==2.0.30
     # via -r requirements.in
 st-annotated-text==4.0.1
     # via streamlit-extras
+stqdm==0.0.5
+    # via -r requirements.in
 streamlit==1.34.0
     # via
     #   -r requirements.in
     #   markdownlit
+    #   stqdm
     #   streamlit-camera-input-live
     #   streamlit-card
     #   streamlit-embedcode
@@ -228,6 +231,8 @@ toolz==0.12.1
     # via altair
 tornado==6.4
     # via streamlit
+tqdm==4.66.4
+    # via stqdm
 typing-extensions==4.12.0
     # via
     #   altair
@@ -237,7 +242,7 @@ tzdata==2024.1
     # via pandas
 urllib3==2.2.1
     # via requests
-validators==0.28.2
+validators==0.28.3
     # via streamlit-extras
 virtualenv==20.26.2
     # via pre-commit

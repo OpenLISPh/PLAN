@@ -54,7 +54,7 @@ try:
         ":earth_asia: Geocode Table",
         use_container_width=True,
     ):
-        geocode_table_modal("barangay")
+        geocode_table_modal("library")
     if "processed_library_df" in st.session_state:
         del st.session_state["processed_library_df"]
 except ValueError as e:

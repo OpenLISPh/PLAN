@@ -14,3 +14,4 @@ load_dotenv()
 
 # Define environment variables
 DATABASE_URL = os.getenv("DATABASE_URL")
+GCP_MAPS_API_KEY = os.getenv("GCP_MAPS_API_KEY")
