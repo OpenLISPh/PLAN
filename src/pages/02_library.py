@@ -5,7 +5,7 @@ from streamlit_extras.row import row
 from modules.clients import POSTGRES_CLIENT
 from modules.parsers.library import read_nlp_pdf_to_df
 from modules.streamlit_elements.buttons import (
-    create_table,
+    create_table_modal,
     delete_table_modal,
     geocode_table_modal,
     update_table_modal,
@@ -34,28 +34,27 @@ try:
         st.info(f"You have {len(unsaved_changes)} unsaved changes.")
 
     table_buttons_row = row(3, vertical_align="center")
-    table_buttons_row.button(
+    if table_buttons_row.button(
+        ":heavy_plus_sign: Upload Table",
+        use_container_width=True,
+        disabled=not (library_df.empty),
+    ):
+        create_table_modal("library", edited_library_df)
+    if table_buttons_row.button(
+        ":floppy_disk: Save Changes",
+        use_container_width=True,
+    ):
+        update_table_modal("library", edited_library_df, unsaved_changes)
+    if table_buttons_row.button(
         ":wastebasket: Delete Table",
-        on_click=delete_table_modal,
-        args=("library",),
         use_container_width=True,
-    )
-    table_buttons_row.button(
-        ":floppy_disk: Update Table",
-        on_click=update_table_modal,
-        args=(
-            "library",
-            edited_library_df,
-            unsaved_changes,
-        ),
-        use_container_width=True,
-    )
-    table_buttons_row.button(
+    ):
+        delete_table_modal("library")
+    if table_buttons_row.button(
         ":earth_asia: Geocode Table",
-        on_click=geocode_table_modal,
-        args=("barangay",),
         use_container_width=True,
-    )
+    ):
+        geocode_table_modal("barangay")
     if "processed_library_df" in st.session_state:
         del st.session_state["processed_library_df"]
 except ValueError as e:
@@ -78,4 +77,4 @@ if "processed_library_df" in st.session_state:
     st.dataframe(st.session_state.processed_library_df)
 
     if st.button("Save to Database"):
-        create_table("library", st.session_state.processed_library_df)
+        create_table_modal("library", st.session_state.processed_library_df)

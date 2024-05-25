@@ -7,6 +7,17 @@ from modules.clients import POSTGRES_CLIENT
 POSTGRES_CLIENT = POSTGRES_CLIENT
 
 
+@st.experimental_dialog("Create Table")
+def create_table_modal(table_name, df):
+    st.write(f"Are you sure you want to save the table '{table_name}'?")
+    confirm_row = row(1, vertical_align="center")
+    if confirm_row.button(
+        ":heavy_check_mark: Confirm",
+        use_container_width=True,
+    ):
+        create_table(table_name, df)
+
+
 @st.experimental_dialog("Update Table")
 def update_table_modal(table_name, df, changes: dict):
     st.write(
@@ -16,24 +27,22 @@ def update_table_modal(table_name, df, changes: dict):
     changes_df = pd.DataFrame.from_dict(changes, orient="index")
     st.write(changes_df)
     confirm_row = row(1, vertical_align="center")
-    confirm_row.button(
+    if confirm_row.button(
         ":heavy_check_mark: Confirm",
-        on_click=update_table,
-        args=(df,),
         use_container_width=True,
-    )
+    ):
+        update_table(df)
 
 
 @st.experimental_dialog("Delete Table")
 def delete_table_modal(table_name):
     st.write(f"Are you sure you want to delete the table '{table_name}'?")
     confirm_row = row(1, vertical_align="center")
-    confirm_row.button(
+    if confirm_row.button(
         ":heavy_check_mark: Confirm",
-        on_click=delete_table,
-        args=(table_name,),
         use_container_width=True,
-    )
+    ):
+        delete_table(table_name)
 
 
 @st.experimental_dialog("Geocode Table")
@@ -76,4 +85,7 @@ def create_table(table_name, df):
 
 
 def geocode_table(table_name):
+    # try:
+
+    #     POSTGRES_CLIENT.create_table(f"{table_name}_geocoding", df)
     pass
