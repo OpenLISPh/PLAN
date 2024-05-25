@@ -25,7 +25,9 @@ try:
     library_df = POSTGRES_CLIENT.read_table("library")
 
     # Display editable dataframe
-    edited_library_df = st.data_editor(library_df, key="library_data_editor")
+    edited_library_df = st.data_editor(
+        library_df, key="library_data_editor", hide_index=True
+    )
 
     unsaved_changes = st.session_state.library_data_editor["edited_rows"]
     if unsaved_changes:

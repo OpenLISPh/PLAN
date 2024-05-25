@@ -17,7 +17,14 @@ class PostgresCRUD:
     def create_table(self, table_name, df):
         logging.info(f"Creating table '{table_name}'...")
         try:
-            df.to_sql(table_name, self.engine, index=False, if_exists="replace")
+            df.to_sql(
+                table_name, self.engine, index=True, index_label="id", if_exists="replace"
+            )
+            with self.engine.connect() as connection:
+                # Add primary key constraint
+                connection.execute(
+                    text(f'ALTER TABLE "{table_name}" ADD PRIMARY KEY (id);')
+                )
             logging.info(f"Table '{table_name}' created successfully.")
         except SQLAlchemyError as e:
             logging.error(f"Error creating table '{table_name}': {e}")

@@ -26,7 +26,9 @@ try:
     barangay_df = POSTGRES_CLIENT.read_table("barangay")
 
     # Display editable dataframe
-    edited_barangay_df = st.data_editor(barangay_df, key="barangay_data_editor")
+    edited_barangay_df = st.data_editor(
+        barangay_df, key="barangay_data_editor", hide_index=True
+    )
 
     unsaved_changes = st.session_state.barangay_data_editor["edited_rows"]
     if len(unsaved_changes) > 0:
@@ -60,7 +62,7 @@ try:
         del st.session_state["converted_barangay_df"]
 
 except ValueError as e:
-    st.error(f"An error occurred while reading the table: '{e}'. Check Help?")
+    st.error(f"An error occurred while reading the table: '{e}'.")
     # File uploader
     uploaded_file = st.file_uploader(
         "Upload PSGC Barangay Publication XLSX", type="xlsx", key="file_uploader"
