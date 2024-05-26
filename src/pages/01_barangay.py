@@ -4,7 +4,7 @@ from streamlit_extras.row import row
 
 from modules.clients import POSTGRES_CLIENT
 from modules.parsers.barangay import read_psgc_excel_data, transform_df
-from modules.streamlit_elements.buttons import (
+from modules.streamlit_elements.table_actions import (
     create_table_modal,
     delete_table_modal,
     geocode_table_modal,
