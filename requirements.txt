@@ -14,6 +14,10 @@ beautifulsoup4==4.12.3
     # via favicon
 blinker==1.8.2
     # via streamlit
+branca==0.7.2
+    # via
+    #   folium
+    #   streamlit-folium
 cachetools==5.3.3
     # via streamlit
 certifi==2024.2.2
@@ -42,6 +46,8 @@ favicon==0.7.0
     # via markdownlit
 filelock==3.14.0
     # via virtualenv
+folium==0.16.0
+    # via streamlit-folium
 fonttools==4.52.1
     # via matplotlib
 geographiclib==2.0
@@ -68,8 +74,11 @@ idna==3.7
 jinja2==3.1.4
     # via
     #   altair
+    #   branca
+    #   folium
     #   pydeck
     #   streamlit-camera-input-live
+    #   streamlit-folium
     #   streamlit-image-coordinates
     #   streamlit-keyup
 jsonschema==4.22.0
@@ -102,6 +111,7 @@ numpy==1.26.4
     # via
     #   altair
     #   contourpy
+    #   folium
     #   matplotlib
     #   pandas
     #   pyarrow
@@ -166,6 +176,7 @@ referencing==0.35.1
 requests==2.32.2
     # via
     #   favicon
+    #   folium
     #   googlemaps
     #   streamlit
 rich==13.7.1
@@ -196,6 +207,7 @@ streamlit==1.34.0
     #   streamlit-embedcode
     #   streamlit-extras
     #   streamlit-faker
+    #   streamlit-folium
     #   streamlit-image-coordinates
     #   streamlit-keyup
     #   streamlit-toggle-switch
@@ -213,6 +225,8 @@ streamlit-extras==0.4.2
     #   streamlit-faker
 streamlit-faker==0.0.3
     # via streamlit-extras
+streamlit-folium==0.20.0
+    # via -r requirements.in
 streamlit-image-coordinates==0.1.6
     # via streamlit-extras
 streamlit-keyup==0.2.4
@@ -248,6 +262,8 @@ virtualenv==20.26.2
     # via pre-commit
 watchdog==4.0.1
     # via streamlit
+xyzservices==2024.4.0
+    # via folium
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

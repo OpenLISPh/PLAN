@@ -21,4 +21,7 @@ dev: reqs # Run reqs and install dependencies
 	venv/bin/pre-commit install
 
 run: # Run app
+	venv/bin/streamlit run src/user.py
+
+admin: # Run admin app
 	venv/bin/streamlit run src/admin.py

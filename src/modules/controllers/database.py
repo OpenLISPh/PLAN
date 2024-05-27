@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import pandas as pd
 from sqlalchemy import MetaData, Table, create_engine, text, update
 from sqlalchemy.exc import SQLAlchemyError
@@ -67,8 +68,19 @@ class PostgresCRUD:
             with self.engine.connect() as connection:
                 table = Table(table_name, self.metadata, autoload_with=self.engine)
                 for _, row in df.iterrows():
+                    # Convert row to a dictionary with native Python types
+                    row_dict = row.to_dict()
+                    row_dict = {
+                        key: (
+                            value.item()
+                            if isinstance(value, (np.integer, np.floating))
+                            else value
+                        )
+                        for key, value in row_dict.items()
+                    }
+
                     stmt = (
-                        update(table).where(table.c.id == row["id"]).values(row.to_dict())
+                        update(table).where(table.c.id == row_dict["id"]).values(row_dict)
                     )
                     connection.execute(stmt)
                 connection.commit()
