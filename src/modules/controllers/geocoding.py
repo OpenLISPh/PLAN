@@ -2,7 +2,6 @@ import logging
 
 import googlemaps
 import pandas as pd
-from geopy.distance import great_circle
 from stqdm import stqdm
 
 from modules.clients import POSTGRES_CLIENT
@@ -74,36 +73,3 @@ def batch_geolocate_df(table_name, batch_size=20, skip_existing=True):
         batch_slice = df[i : i + batch_size]
         batch_result = _geolocate_batch(batch_slice, poi_column)
         POSTGRES_CLIENT.update_table(f"{table_name}_geocoding", batch_result)
-
-
-def calculate_catchment_areas(
-    libraries_df,
-    barangays_df,
-    catchment_radius_km,
-    brgy_population_col="2020 Population",
-    libraries_name_col="NAME OF LIBRARY",
-):
-    # Initialize a list to hold the catchment area data
-    catchment_areas = []
-
-    # Iterate over each library to calculate its catchment area
-    for _, lib in libraries_df.iterrows():
-        lib_coord = (lib["geometry.location.lat"], lib["geometry.location.lng"])
-        catchment_population = 0
-
-        # Check each barangay for inclusion in the catchment area
-        for _, brgy in barangays_df.iterrows():
-            brgy_coord = (brgy["geometry.location.lat"], brgy["geometry.location.lng"])
-            if great_circle(lib_coord, brgy_coord).kilometers <= catchment_radius_km:
-                catchment_population += brgy[brgy_population_col]
-
-        # Append the calculated data to the list
-        catchment_areas.append(
-            {
-                f"{libraries_name_col}": lib[libraries_name_col],
-                "Catchment Population": catchment_population,
-            }
-        )
-
-    # Convert the list of dictionaries to a DataFrame for easier analysis
-    return pd.DataFrame(catchment_areas)
