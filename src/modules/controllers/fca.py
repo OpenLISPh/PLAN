@@ -18,6 +18,8 @@ def calculate_library_catchment_areas(
     brgy_population_col="2020 Population",
     libraries_name_col="NAME OF LIBRARY",
     brgy_name_col="Name",
+    decay_parameter=1000,
+    cut_off=2000,
 ):
     # Initialize a list to hold the catchment area data
     catchment_areas = []
@@ -26,13 +28,17 @@ def calculate_library_catchment_areas(
         logging.info(f"Calculating catchment for {lib[libraries_name_col]}")
         logging.info(f"Collection Size: {lib['collection_size']}")
         lib_coord = (lib["latitude"], lib["longitude"])
-        catchment_population = 0
+        raw_catchment_population = 0
+        weighted_catchment_population = 0
         catchment_barangays = []
         # Check each barangay for inclusion in the catchment area
         for _, brgy in barangays_df.iterrows():
             brgy_coord = (brgy["latitude"], brgy["longitude"])
             if great_circle(lib_coord, brgy_coord).kilometers <= catchment_radius_km:
-                catchment_population += int(brgy[brgy_population_col])
+                distance = calculate_distance(brgy_coord, lib_coord)
+                weight = gaussian_weight(distance, decay_parameter, cut_off)
+                raw_catchment_population += int(brgy[brgy_population_col])
+                weighted_catchment_population += int(brgy[brgy_population_col]) * weight
                 catchment_barangays.append(
                     (brgy[brgy_name_col], brgy[brgy_population_col])
                 )
@@ -42,9 +48,13 @@ def calculate_library_catchment_areas(
                 "id": lib["id"],
                 f"{libraries_name_col}": lib[libraries_name_col],
                 "collection_size": lib["collection_size"],
-                "Catchment Population": catchment_population,
+                "Raw Catchment Population": raw_catchment_population,
+                # "Service to Population Ratio": get_service_to_population_ratio(
+                #     raw_catchment_population, lib["collection_size"]
+                # ),
+                "Weighted Catchment Population": weighted_catchment_population,
                 "Service to Population Ratio": get_service_to_population_ratio(
-                    catchment_population, lib["collection_size"]
+                    weighted_catchment_population, lib["collection_size"]
                 ),
                 "Catchment Barangays": catchment_barangays,
             }
@@ -101,9 +111,6 @@ def calculate_brgy_catchment_areas(
         for _, lib in libraries_df.iterrows():
             lib_coord = (lib["latitude"], lib["longitude"])
             if great_circle(brgy_coord, lib_coord).kilometers <= catchment_radius_km:
-                # TO-DO:
-                # Get the Service to Population Ratio from the libraries_fca_df
-                # Multiplied by the weighted distance from the library to the brgy
                 distance = calculate_distance(brgy_coord, lib_coord)
                 weight = gaussian_weight(distance, decay_parameter, cut_off)
                 service_to_population_ratio = libraries_fca_df.loc[

@@ -102,18 +102,20 @@ if not selected_library_geocoding_df.empty and not selected_barangay_geocoding_d
         zoom_start=11,
     )
 
-    lib_valid_rows = selected_library_geocoding_df.dropna(
+    lib_valid_rows = edited_selected_library_geocoding_df.dropna(
         subset=["latitude", "longitude"]
     )
-    lib_invalid_rows = selected_library_geocoding_df[
-        selected_library_geocoding_df[["latitude", "longitude"]].isna().any(axis=1)
+    lib_invalid_rows = edited_selected_library_geocoding_df[
+        edited_selected_library_geocoding_df[["latitude", "longitude"]].isna().any(axis=1)
     ]
 
-    brgy_valid_rows = selected_barangay_geocoding_df.dropna(
+    brgy_valid_rows = edited_selected_barangay_geocoding_df.dropna(
         subset=["latitude", "longitude"]
     )
-    brgy_invalid_rows = selected_barangay_geocoding_df[
-        selected_barangay_geocoding_df[["latitude", "longitude"]].isna().any(axis=1)
+    brgy_invalid_rows = edited_selected_barangay_geocoding_df[
+        edited_selected_barangay_geocoding_df[["latitude", "longitude"]]
+        .isna()
+        .any(axis=1)
     ]
 
     if len(lib_invalid_rows) > 0:
@@ -152,15 +154,6 @@ if (
         step=1,
     )
 
-    # Library FCA
-    library_fca_df = calculate_library_catchment_areas(
-        libraries_df=edited_selected_library_geocoding_df,
-        barangays_df=edited_selected_barangay_geocoding_df,
-        catchment_radius_km=catchment_radius_slider,
-    )
-    st.write("Library FCA")
-    st.dataframe(library_fca_df, use_container_width=True, hide_index=True)
-
     # Distance Matrix
     distance_matrix = calculate_distance_matrix(
         libraries_df=edited_selected_library_geocoding_df,
@@ -186,8 +179,19 @@ if (
     st.write("Weighted Distance Matrix")
     st.dataframe(weighted_distance_matrix, use_container_width=True)
 
+    # Library FCA
+    library_fca_df = calculate_library_catchment_areas(
+        libraries_df=edited_selected_library_geocoding_df,
+        barangays_df=edited_selected_barangay_geocoding_df,
+        catchment_radius_km=catchment_radius_slider,
+        decay_parameter=decay_parameter_slider,
+        cut_off=catchment_radius_slider * 1000,  # in meters
+    )
+    st.write("Library FCA")
+    st.dataframe(library_fca_df, use_container_width=True, hide_index=True)
+
     # E2SFCA
-    st.write("E2SFCA")
+    st.write("Barangay FCA (E2SFCA)")
     barangay_fca_df = calculate_brgy_catchment_areas(
         libraries_df=edited_selected_library_geocoding_df,
         libraries_fca_df=library_fca_df,
