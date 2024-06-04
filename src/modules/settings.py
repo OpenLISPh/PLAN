@@ -10,7 +10,7 @@ if not os.path.exists(env_path):
     raise FileNotFoundError(f"Missing .env file at root {env_path}")
 
 # Load .env file
-load_dotenv()
+load_dotenv(override=True)
 
 # Define environment variables
 DATABASE_URL = os.getenv("DATABASE_URL")
