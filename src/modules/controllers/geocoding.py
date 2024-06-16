@@ -68,8 +68,7 @@ def batch_geolocate_df(table_name, batch_size=20, skip_existing=True):
     stqdm_desc = (
         f"Geolocating {len(df)} entries from '{table_name}' in batches of {batch_size}\n"
     )
-    for i in stqdm(range(0, 10000, batch_size), desc=stqdm_desc):  # Use for testing
-        # for i in stqdm(range(0, len(df), batch_size), desc=stqdm_desc):
+    for i in stqdm(range(0, len(df), batch_size), desc=stqdm_desc):
         batch_slice = df[i : i + batch_size]
         batch_result = _geolocate_batch(batch_slice, poi_column)
         POSTGRES_CLIENT.update_table(f"{table_name}_geocoding", batch_result)
