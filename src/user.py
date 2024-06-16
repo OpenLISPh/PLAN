@@ -141,23 +141,20 @@ if not selected_library_geocoding_df.empty and not selected_barangay_geocoding_d
     st_folium(library_map, width=700, height=500)
 
 # E2SFCA
-if (
-    not edited_selected_library_geocoding_df.empty
-    and not edited_selected_barangay_geocoding_df.empty
-):
+if not lib_valid_rows.empty and not brgy_valid_rows.empty:
     # Catchment radius slider
     catchment_radius_slider = st.slider(
         "Catchment Radius (km)",
         min_value=1,
-        max_value=20,
+        max_value=50,
         value=2,
         step=1,
     )
 
     # Distance Matrix
     distance_matrix = calculate_distance_matrix(
-        libraries_df=edited_selected_library_geocoding_df,
-        barangays_df=edited_selected_barangay_geocoding_df,
+        libraries_df=lib_valid_rows,
+        barangays_df=brgy_valid_rows,
     )
     st.write("Distance Matrix")
     st.dataframe(distance_matrix, use_container_width=True)
@@ -165,7 +162,7 @@ if (
     decay_parameter_slider = st.slider(
         "Decay Parameter (m)",
         min_value=100,
-        max_value=10000,
+        max_value=(catchment_radius_slider * 1000),
         value=1000,
         step=100,
     )
@@ -181,8 +178,8 @@ if (
 
     # Library FCA
     library_fca_df = calculate_library_catchment_areas(
-        libraries_df=edited_selected_library_geocoding_df,
-        barangays_df=edited_selected_barangay_geocoding_df,
+        libraries_df=lib_valid_rows,
+        barangays_df=brgy_valid_rows,
         catchment_radius_km=catchment_radius_slider,
         decay_parameter=decay_parameter_slider,
         cut_off=catchment_radius_slider * 1000,  # in meters
@@ -191,11 +188,11 @@ if (
     st.dataframe(library_fca_df, use_container_width=True, hide_index=True)
 
     # E2SFCA
-    st.write("Barangay FCA (E2SFCA)")
+    st.write("Barangay FCA")
     barangay_fca_df = calculate_brgy_catchment_areas(
-        libraries_df=edited_selected_library_geocoding_df,
+        libraries_df=lib_valid_rows,
         libraries_fca_df=library_fca_df,
-        barangays_df=edited_selected_barangay_geocoding_df,
+        barangays_df=brgy_valid_rows,
         catchment_radius_km=catchment_radius_slider,
         decay_parameter=decay_parameter_slider,
         cut_off=catchment_radius_slider * 1000,  # in meters
