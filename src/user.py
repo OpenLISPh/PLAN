@@ -19,7 +19,7 @@ user_styling.user_styling()
 user_ui.sidebar()
 
 # Show editable dataframe for Library
-st.markdown("Selected Libraries")
+st.markdown(f"Selected Libraries ({len(st.session_state['library_multiselect'])})")
 original_library_df = st.session_state["library_df"]
 selected_library_df = original_library_df[
     original_library_df["id"].isin(
@@ -57,7 +57,7 @@ else:
 
 
 # Show editable dataframe for Barangay
-st.markdown("Selected Barangays")
+st.markdown(f"Selected Barangays ({len(st.session_state['barangay_multiselect'])})")
 original_barangay_df = st.session_state["barangay_df"]
 selected_barangay_df = original_barangay_df[
     original_barangay_df["id"].isin(
@@ -140,61 +140,61 @@ if not selected_library_geocoding_df.empty and not selected_barangay_geocoding_d
         ).add_to(library_map)
     st_folium(library_map, width=700, height=500)
 
-# E2SFCA
-if not lib_valid_rows.empty and not brgy_valid_rows.empty:
-    # Catchment radius slider
-    catchment_radius_slider = st.slider(
-        "Catchment Radius (km)",
-        min_value=1,
-        max_value=50,
-        value=2,
-        step=1,
-    )
-
-    # Distance Matrix
-    distance_matrix = calculate_distance_matrix(
-        libraries_df=lib_valid_rows,
-        barangays_df=brgy_valid_rows,
-    )
-    st.write("Distance Matrix")
-    st.dataframe(distance_matrix, use_container_width=True)
-
-    decay_parameter_slider = st.slider(
-        "Decay Parameter (m)",
-        min_value=100,
-        max_value=(catchment_radius_slider * 1000),
-        value=1000,
-        step=100,
-    )
-
-    # Weighted Distance Matrix
-    weighted_distance_matrix = calculate_gaussian_weight_df(
-        distance_matrix=distance_matrix,
-        decay_parameter=decay_parameter_slider,
-        cut_off=catchment_radius_slider * 1000,  # in meters
-    )
-    st.write("Weighted Distance Matrix")
-    st.dataframe(weighted_distance_matrix, use_container_width=True)
-
-    # Library FCA
-    library_fca_df = calculate_library_catchment_areas(
-        libraries_df=lib_valid_rows,
-        barangays_df=brgy_valid_rows,
-        catchment_radius_km=catchment_radius_slider,
-        decay_parameter=decay_parameter_slider,
-        cut_off=catchment_radius_slider * 1000,  # in meters
-    )
-    st.write("Library FCA")
-    st.dataframe(library_fca_df, use_container_width=True, hide_index=True)
-
     # E2SFCA
-    st.write("Barangay FCA")
-    barangay_fca_df = calculate_brgy_catchment_areas(
-        libraries_df=lib_valid_rows,
-        libraries_fca_df=library_fca_df,
-        barangays_df=brgy_valid_rows,
-        catchment_radius_km=catchment_radius_slider,
-        decay_parameter=decay_parameter_slider,
-        cut_off=catchment_radius_slider * 1000,  # in meters
-    )
-    st.dataframe(barangay_fca_df, use_container_width=True, hide_index=True)
+    if not lib_valid_rows.empty and not brgy_valid_rows.empty:
+        # Catchment radius slider
+        catchment_radius_slider = st.slider(
+            "Catchment Radius (km)",
+            min_value=1,
+            max_value=50,
+            value=2,
+            step=1,
+        )
+
+        # Distance Matrix
+        distance_matrix = calculate_distance_matrix(
+            libraries_df=lib_valid_rows,
+            barangays_df=brgy_valid_rows,
+        )
+        st.write("Distance Matrix")
+        st.dataframe(distance_matrix, use_container_width=True)
+
+        decay_parameter_slider = st.slider(
+            "Decay Parameter (m)",
+            min_value=100,
+            max_value=(catchment_radius_slider * 1000),
+            value=1000,
+            step=100,
+        )
+
+        # Weighted Distance Matrix
+        weighted_distance_matrix = calculate_gaussian_weight_df(
+            distance_matrix=distance_matrix,
+            decay_parameter=decay_parameter_slider,
+            cut_off=catchment_radius_slider * 1000,  # in meters
+        )
+        st.write("Weighted Distance Matrix")
+        st.dataframe(weighted_distance_matrix, use_container_width=True)
+
+        # Library FCA
+        library_fca_df = calculate_library_catchment_areas(
+            libraries_df=lib_valid_rows,
+            barangays_df=brgy_valid_rows,
+            catchment_radius_km=catchment_radius_slider,
+            decay_parameter=decay_parameter_slider,
+            cut_off=catchment_radius_slider * 1000,  # in meters
+        )
+        st.write("Library FCA")
+        st.dataframe(library_fca_df, use_container_width=True, hide_index=True)
+
+        # E2SFCA
+        st.write("Barangay FCA")
+        barangay_fca_df = calculate_brgy_catchment_areas(
+            libraries_df=lib_valid_rows,
+            libraries_fca_df=library_fca_df,
+            barangays_df=brgy_valid_rows,
+            catchment_radius_km=catchment_radius_slider,
+            decay_parameter=decay_parameter_slider,
+            cut_off=catchment_radius_slider * 1000,  # in meters
+        )
+        st.dataframe(barangay_fca_df, use_container_width=True, hide_index=True)
