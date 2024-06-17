@@ -56,7 +56,7 @@ PLAN is built and tested on a WSL2 Ubuntu 20.04 machine.
 Get started with **PLAN** by following these steps:
 
 
-### Install {Project Name}
+### Install PLAN
 1. Clone the repository:
     ```sh
     git clone https://github.com/OpenLISPh/PLAN.git
@@ -83,18 +83,17 @@ Get started with **PLAN** by following these steps:
     ```
 
 
-### Run {Project Name}
+### Run PLAN
 1. Launch the admin application by running `make admin`
 2. Launch the user page by running `make run`
 
 
 ## Contributing guidelines
-{Include a link to your contributing guide here. If you do not have a contributing guide, incorporate the information in the README.}
+Contributions will be opened in the near future.
 
 
 ## Additional documentation
-Contributions will be opened in the near future.
-
+In-progress. Please be patient.
 
 ## How to get help
 Check GitHub issues for help. Additional means will be available soon.
