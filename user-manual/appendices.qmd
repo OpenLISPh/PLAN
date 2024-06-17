@@ -1,0 +1,57 @@
+# Appendix
+
+## Licenses of Third-Party Software
+
+This project includes the following third-party software:
+
+1. **pandas**
+   - License: BSD 3-Clause License
+   - URL: https://github.com/pandas-dev/pandas
+
+2. **Streamlit**
+   - License: Apache License 2.0
+   - URL: https://github.com/streamlit/streamlit
+
+3. **pre-commit**
+   - License: MIT License
+   - URL: https://github.com/pre-commit/pre-commit
+
+4. **geopy**
+   - License: MIT License
+   - URL: https://github.com/geopy/geopy
+
+5. **googlemaps**
+   - License: Apache License 2.0
+   - URL: https://github.com/googlemaps/google-maps-services-python
+
+6. **openpyxl**
+   - License: MIT License
+   - URL: https://foss.heptapod.net/openpyxl/openpyxl
+
+7. **python-dotenv**
+   - License: BSD 3-Clause "New" or "Revised" License
+   - URL: https://github.com/theskumar/python-dotenv
+
+8. **psycopg2-binary**
+   - License: LGPL 3.0
+   - URL: https://github.com/psycopg/psycopg2
+
+9. **sqlalchemy**
+   - License: MIT License
+   - URL: https://github.com/sqlalchemy/sqlalchemy
+
+10. **stqdm**
+    - License: Apache License 2.0
+    - URL: https://github.com/Wirg/stqdm
+
+11. **streamlit-extras**
+    - License: Apache License 2.0
+    - URL: https://github.com/arnaudmiribel/streamlit-extras
+
+12. **streamlit_folium**
+    - License: MIT License
+    - URL: https://github.com/randyzwitch/streamlit-folium
+
+13. **tabula-py**
+    - License: MIT License
+    - URL: https://github.com/chezou/tabula-py  

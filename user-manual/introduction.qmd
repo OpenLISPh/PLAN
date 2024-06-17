@@ -1,0 +1,14 @@
+# Introduction
+
+## Project Description
+**Philippine Library Accessibility Navigator (PLAN)** allows researchers to analyze the accessibility of libraries across various barangays in the Philippines using the Enhanced Two-Step Floating Catchment Area (E2SFCA) method.
+
+**PLAN** assists users in identifying areas with low library accessibility and highlighting potential gaps in library services. 
+
+Unlike traditional GIS tools, **PLAN** provides a streamlined, web-based interface for performing spatial accessibility analysis without requiring extensive GIS expertise. The application is built using Streamlit, which allows for quick and interactive web application development. This ensures that users can easily navigate through the tool, upload data, adjust parameters, and visualize results without needing to install complex GIS software.
+
+## Purpose of the Manual
+This manual provides detailed instructions on how to install, configure, and use PLAN.
+
+## Audience
+This manual is intended for researchers, urban planners, and policymakers.

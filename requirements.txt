@@ -46,7 +46,7 @@ favicon==0.7.0
     # via markdownlit
 filelock==3.15.1
     # via virtualenv
-folium==0.16.0
+folium==0.17.0
     # via streamlit-folium
 fonttools==4.53.0
     # via matplotlib

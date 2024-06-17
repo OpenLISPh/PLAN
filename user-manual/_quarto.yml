@@ -1,0 +1,38 @@
+project:
+  type: book
+
+book:
+  title: "Philippine Library Accessibility Navigator (PLAN) User Manual"
+  author: "Luke Martin Hernandez"
+  chapters:
+    - index.qmd
+    - introduction.qmd
+    - installation.qmd
+    - configuration.qmd
+    - admin.qmd
+    - user.qmd
+    - contributing.qmd
+    - appendices.qmd
+
+format:
+  pdf:
+    documentclass: book
+    output-file: "PLAN-User-Manual.pdf"
+    include-in-header:
+      text: |
+        \usepackage{fancyhdr}
+        \pagestyle{fancy}
+        \fancyhead[LE,RO]{Philippine Library Accessibility Navigator (PLAN)}
+        \fancyhead[RE,LO]{User Manual}
+        \fancyfoot[C]{\thepage}
+    highlight-style: atom-one-dark
+    code-block-bg: "#282C34"
+    toc: true
+    number-sections: true
+    colorlinks: true
+    geometry: [left=1in, right=1in, top=1in, bottom=1in]
+    fontsize: 12pt
+    mainfont: "Times New Roman"
+    sansfont: "Arial"
+    monofont: "Courier New"
+    papersize: letter

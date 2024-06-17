@@ -1,0 +1,17 @@
+# Philippine Library Accessibility Navigator (PLAN) User Manual
+
+Welcome to the user manual for the Philippine Library Accessibility Navigator (PLAN). This guide will help you install, configure, and use PLAN effectively.
+
+## Overview
+
+The Philippine Library Accessibility Navigator (PLAN) is a powerful tool designed to help you analyze the accessibility of libraries across various barangays in the Philippines using the Enhanced Two-Step Floating Catchment Area (E2SFCA) method. This manual will provide you with comprehensive instructions and guidance on how to make the most of this tool.
+
+## Sections
+
+1. **[Introduction](introduction.qmd)**: An overview of the PLAN project, its purpose, and the intended audience.
+2. **[Installation](installation.qmd)**: Detailed steps for installing PLAN and setting up the necessary environment.
+3. **[Configuration](configuration.qmd)**: Instructions for configuring PLAN, including setting up environment variables.
+4. **[Admin](admin.qmd)**: How to set up PLAN as a developer or administrator.
+5. **[User](user.qmd)**: How to run the application, navigate the interface, and interpret results.
+6. **[Contributing](contributing.qmd)**: Guidelines for contributing to the project.
+7. **[Appendices](appendices.qmd)**: Additional resources, acknowledgments, and license information.

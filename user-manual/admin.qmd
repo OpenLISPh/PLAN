@@ -1,0 +1,37 @@
+# Running PLAN as an Administrator
+
+1. If you are a developer running your own instance of PLAN, start here. Otherwise, skip this step and proceed to user.
+
+- You will need to ingest data first using the admin interface.
+
+## Navigating the Admin Interface
+
+When accessing the admin interface for the first time, you will see an error `An error occurred while reading the table: 'Table library not found'`. This is normal as your database is not yet populated.
+
+![Admin inteface barangay page](./images/admin/admin_barangay.png)
+
+![Admin inteface library page](./images/admin/admin_library.png)
+
+### Ingesting Library Data
+
+You can obtain the [Directory of Public Libraries](https://web.nlp.gov.ph/directory-2/) from the National Library of the Philippines (NLP) website. This is a PDF document that contains information on all public libraries affiliated with the NLP. We will use this information to populate the library table in the database.
+
+![Library upload interface](./images/admin/library_upload.png)
+
+The database will be saved upon hitting `Save to Database` and is ready for geocoding. Geocoding is the process of converting addresses to geographic coordinates. However, in this case we are using the "NAME OF LIBRARY" column from NLP and using the Google Maps API to search for the Google Maps place, address, and coordinates that correspond closest to the name of the library. This is useful automatically processing the large number of libraries and barangays, but it can make mistakes, especially for locations not in Google Maps or are named differently from the NLP directory.
+
+Pressing `Geocode Table` brings up a modal to confirm that you'd like to geocode the table. This can be can be a long process and require large amounts of calls to the Google Maps API. As of publication, there are over 1,400 libraries in the database. Do not process anything after starting the geocoding process. If this process is interrupted, it can continue geocoding only libraries that do not have geolocations yet.
+
+![Library geocoding](./images/admin/library_geocoding.png)
+
+In this page, you can also update any fields in the table if you find the need to do so. Make sure to hit "Save Changes" and confirming the changes in the table before moving on.
+
+### Ingesting Barangay Data
+
+You can repeat the same process for barangays table. The barangay data is published by PSA as a PSGC Publications excel (.xlsx) file. You can obtain the [PSGC Publications xlsx file](https://psa.gov.ph/classification/psgc/barangays) from the PSA website.
+
+![PSGC Publications](./images/admin/psa_psgc.png)
+
+The same steps are done for geocoding the barangay table. There are however over 42,000 barangays in the database. This may be expensive to geocode via the Google Maps API. Caution is advised.
+
+![Barangay geocoding](./images/admin/barangay_geocoding.png)

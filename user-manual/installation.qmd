@@ -1,0 +1,27 @@
+# Installing PLAN
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/OpenLISPh/PLAN.git
+   cd PLAN
+   ```
+
+2. Create and activate a virtual environment, and install the required Python packages using Make:
+
+   ```sh
+   make venv
+   make dev
+   ```
+
+   ![make venv](./images/installation/make_venv.png)
+
+   ![make dev](./images/installation/make_dev.png)
+
+3. Start the PostgreSQL server with Docker:
+
+   ```sh
+   make db
+   ```
+
+   ![make db](./images/installation/make_db.png)

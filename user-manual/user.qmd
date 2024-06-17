@@ -1,0 +1,158 @@
+# Running PLAN as a user
+
+1. If you are a regular user of PLAN, start here.
+- If you are a user of PLAN using the hosted version, you can simply access PLAN by entering the URL in your browser.
+- If you are using an instance of PLAN that is managed by your organization, refer to your administrator for the URL.
+- If you are a developer or administrator who has completed the installation steps, you can run PLAN and set its root URL to the user page by running:
+
+```sh
+make run
+```
+
+## Navigating the User Interface
+
+![PLAN user inteface](./images/user/user_interface.png)
+
+PLAN is designed as a single-page application that enables users to select any set of libraries and barangays to measure library accessibility using the Enhanced Two-Step Floating Catchment Area (E2SFCA) method. The interface features a sidebar for selecting libraries and barangays and a main page for entering library services, visualizing calculations, and interpreting results.
+
+While it can be daunting for first time users, PLAN can be imagined as a slightly complicated spreadsheet that already contains library and barangay data, as well as the formulas used to calculate the accessibility. In fact, data and results in this sheet can be copied and pasted into Google Sheets or Microsoft Excel. Any further charts, visualizations, or calculations can be continued in any spreadsheet software.
+
+## E2SFCA Overview
+
+The E2SFCA method evaluates the ratio of different library services to the population they serve. A brief overview of the E2SFCA method is provided below, with a more detailed explanation available in the accompanying thesis.
+
+The accessibility of each library is determined using the following key steps: First, the total population of barangays whose barangay halls fall within a library's catchment area is measured. The barangay hall serves as a proxy for the population centroid, based on the assumption that it is strategically located to best serve the community. If a barangay hall is within the radius around a library, the barangay is considered serviceable by that library. A gravity model is employed to estimate how accessibility decreases with increasing distance, indicating that portions of the barangay are less likely to patronize the library due to access difficulties. Finally, the ratio of the inputted service is divided by the newly weighted population of the barangay.
+
+Similar steps are taken for each barangay: the previously calculated service-to-population ratio of each library within its catchment is multiplied by the decay parameter and then summed to obtain the total accessibility of the library. This represents the total number of services available to the barangay.
+
+## Selecting Libraries
+
+![Library selection](./images/user/library_selection.png)
+
+The first step is to select the libraries for which you want to measure accessibility. This is done by choosing one or more locations from the first multiselect bar labeled "Select Location." Here, location refers to the library's location according to the NLP directory. You may need to select multiple items to encompass an entire region (e.g., Laguna, Sta. Rosa, Biñan).
+
+![Library location selection example](./images/user/library_location_multiselect.png)
+
+The next multiselect will list all libraries from the selected locations. A "Select All" checkbox can be used to select all libraries from these locations. Libraries can still be added or removed at any point.
+
+![Library selection results](./images/user/library_complete.png)
+
+## Selecting Barangays
+
+Next, select barangays from the same region as the chosen libraries. Barangay data is organized according to PSA's PSGC classification of administrative units in the Philippines, which can differ significantly from the NLP directory. Filter barangays by selecting one or more regions, provinces, and municipalities/cities.
+
+Some municipalities are not part of a province but belong to a certain region. For instance, cities in NCR all belong to the NCR region but do not belong to any province. For these cities and municipalities, you will need to select the region again in the province multiselect to locate the city/municipality.
+
+![Library and barangay selection](./images/user/library_barangay_multiselect.png)
+
+After selecting all the libraries and barangays, you may notice that some main branches, especially in Metro Manila, are missing. This is because in the NLP database, main branches are classified not under their respective cities (e.g., "Quezon City") but as "Quezon." In such cases, select both "Quezon" and "Quezon City" or "Pasig" and "Pasig City." Be cautious, as "Quezon" also refers to "Quezon Province." This issue stems from the original NLP directory and not in PLAN.
+
+![Complete library and barangay selection](./images/user/library_barangay_multiselect_complete.png)
+
+Now that you have selected all the libraries and barangays, you can move on to the next step.
+
+## Inspecting Selected Libraries and Barangays
+
+In the main body of the page, you will find the selected libraries dataframe or simply the selected libraries sheet. This sheet contains the selected libraries and their relevant fields. The "NAME OF LIBRARY" column lists the library names according to the NLP directory, while "Google Maps Name" refers to the library geocoded by the Google Maps API. If these do not refer to the same library, are missing values, or contain NaN, you may want to manually update the rows with the correct name and GPS coordinates.
+
+![Library sheet containing selected libraries with NaN values](./images/user/library_nan.png)
+
+You can search for your library on Google Maps and right-click its place marker to find its GPS coordinates. Fill in these values in the selected libraries sheet, and it will be included in the results. Alternatively, you may leave it blank, and libraries and barangays without valid GPS coordinates will be excluded from the results. You can edit this at any point, even during the subsequent steps, and the calculations will automatically update to reflect your changes.
+
+Follow the same steps for the selected barangays and proceed to the next steps once you are satisfied.
+
+## Entering Services
+
+You are now ready to enter the services you want to measure. Services refer to the different aspects of the library system you wish to evaluate. Recommended services include collection size, digital collection size, floor area, service hours per week, staff size, seating capacity, and computer stations.
+
+Only one type of service can be entered at a time. If you wish to measure multiple services, you will need to repeat the process for each. In this example, we will enter collection size as the service.
+
+![Entering mock values for Quezon City Library System](./images/user/library_selection_with_mock_values.png)
+
+In this example, we enter a possible collection size for the Quezon City Library System. Libraries that are closed or under renovation are assigned a collection size of zero. This is a judgment call for the librarian or administrator. We noticed that "Loyola Barangay Library" referred to the "Rizal Library" in our sheet and could not find it on Google Maps, so the values for Rizal Library and its coordinates were removed from the results.
+
+Scroll down on the page to see your selected libraries and barangays on a map. This visualization helps identify barangays without libraries or libraries/barangays that are geocoded incorrectly. In our example, Pansol Barangay Library is placed in the middle of Caloocan.
+
+![Map of selected libraries and barangays](./images/user/map_example.jpg)
+
+No results were found for the library in Pansol, Diliman. We will exclude this library from the results by returning to the sheet and removing its location values.
+
+![Updated map of selected libraries and barangays](./images/user/map_updated.jpg)
+
+The map is automatically updated to reflect our changes.
+
+## Setting Parameters
+
+### Catchment Radius
+
+Next, set the "Catchment Radius (km)" parameter. This radius around the library determines the serviceable area. A default value of 2 km is set based on academic research, but you may adjust this value based on your specific needs. Rural areas may require a larger radius due to fewer libraries.
+
+![Setting catchment radius](./images/user/catchment_radius.png)
+
+Below this, you will find the Distance Matrix, representing the geodesic distances between all selected libraries and barangays.
+The geodesic distance is the distance when drawing the shortest line between two points on the earth's surface.
+
+### Decay Parameter
+
+The "Decay Parameter (m)" slider allows you to adjust how accessibility decreases with distance using a Gaussian function:
+
+$$ w(d) = e^{-\frac{d^2}{2\sigma^2}} $$
+
+where:
+
+- $w(d)$ is the weight based on distance $d$,
+- $\sigma$ is the decay parameter controlling the rate of decay.
+
+The decay parameter models how far people are willing to travel within the catchment radius. A higher decay parameter means accessibility decreases more slowly with distance, while a lower decay parameter means accessibility decreases more rapidly. Adjust the decay parameter between 100 m and the catchment radius; distances beyond the catchment radius are considered inaccessible.
+
+![Setting decay parameter](./images/user/decay_parameter.png)
+
+The weighted distance matrix applies the decay parameter to the distance values, showing weights from 0 to 1 within the catchment radius.
+
+![Weighted distance matrix](./images/user/weighted_distance_matrix.png)
+
+## Library FCA
+
+The Library FCA table contains the service-to-population ratio of each library. It includes columns for raw catchment population, weighted population within the catchment, and the weighted service-to-population ratio. This ratio reflects the number of books per person in the catchment area, adjusted for distance decay. 
+
+In this case, the weighted service-to-population ratio represents the number of books per person in the catchment area, adjusted for the distance decay effect. The intuition behind this is that populations farther from the library are less likely to avail of its services, hence the adjustment based on the decay parameter.
+
+![Library FCA table](./images/user/library_fca.png)
+
+This table also lists the barangays within each library's catchment area.
+
+## Barangay FCA
+
+The Barangay FCA table provides cumulative service-to-population scores from each library within its catchment, weighted by distance decay. These scores reflect overall accessibility to library services within each barangay, with closer libraries contributing more significantly. This table helps identify which barangays have limited access to library services.
+
+![Barangay FCA table](./images/user/barangay_fca.png)
+
+This table also presents the libraries accessible to each barangay, which helps identify which barangays have the least access to library services. 
+
+## Interpreting Results
+
+Interpretation of results is highly personal to each library. In the example above, where we assumed that accessibility decays quickly after 500 meters, and that users outside of the 2km catchment are not likely to patronize the library, we find that the raw catchment population of 166,951 yields a weighted catchment population of only 1,841.7744 or just above 1%. This means that the collection size of 18,000 of the Quezon City Main Library has a service-to-population ratio of 9.7732, or almost 10 books per person.
+
+![Library FCA score of Quezon City Main Library at 500m](./images/user/qcpl_500m.png)
+
+However a distance decay parameter set at 1000m yields a weighted catchment population of 26,127.2285, giving us 0.688 books per person.
+
+![Library FCA score of Quezon City Main Library at 1000m](./images/user/qcpl_1000m.png)
+
+Rural libraries, or libraries in different terrain, population distributions, budget contraints, etc are likely to have vastly different parameters. A set of libraries in a large, sparsely populated province may want to set a higher catchment of 3, 5, or 10km. They may also have to set a higher decay parameter if their population is known to be very willing to travel a large distance to reach the library. They may want to set a lower decay parameter during the rainy season where people are unwilling to travel far away from their homes.
+
+The primary goal of PLAN is to provide insights into the distribution of library services within a library system, not to deliver absolute accessibility scores. Here are some ways to interpret the results:
+
+### Identifying Disparities
+
+One of the key benefits of using PLAN is the ability to identify disparities in library accessibility within the system. By analyzing the service-to-population ratios, users can pinpoint which libraries offer high accessibility and which ones fall short. 
+
+Libraries with low accessibility ratios may indicate a need for additional resources, improved infrastructure, or strategic relocation to better serve the community. Conversely, libraries with high accessibility may serve as models for best practices in resource allocation and community engagement.
+
+### Visualizing Results
+
+PLAN provides powerful visualization tools to help users understand the spatial distribution of library services across different areas. By mapping the selected libraries and barangays, users can easily see which regions are well-served and which are underserved. This geographic representation aids in identifying clusters of high or low accessibility and can highlight potential gaps in service coverage. Visualizing results in this way helps to communicate findings more effectively to stakeholders and can support strategic planning efforts to enhance library access.
+
+### Scenario Analysis
+
+PLAN allows users to conduct scenario analysis by adjusting various parameters, such as catchment radii and decay parameters. This flexibility enables users to explore how changes in these parameters impact library accessibility. For instance, increasing the catchment radius may show how accessibility improves in rural areas where libraries are sparse. Conversely, adjusting the decay parameter can simulate different levels of population willingness to travel, providing insights into how accessibility fluctuates under various conditions.
