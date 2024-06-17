@@ -71,7 +71,8 @@ Get started with **PLAN** by following these steps:
     ```
 
 3. Start the PostgreSQL server with Docker:
-    ```make db
+    ```sh
+    make db
     ```
 
 
