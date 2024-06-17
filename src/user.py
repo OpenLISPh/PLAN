@@ -39,9 +39,18 @@ selected_library_geocoding_df = pd.merge(
     columns={"geometry.location.lat": "latitude", "geometry.location.lng": "longitude"}
 )
 
-selected_library_geocoding_df["collection_size"] = 0
+selected_library_geocoding_df["library_service"] = 0
+selected_library_geocoding_df.rename(columns={"name": "Google Maps Name"}, inplace=True)
 lib_column_order = tuple(
-    ["id", "NAME OF LIBRARY", "place_id", "latitude", "longitude", "collection_size"]
+    [
+        "id",
+        "NAME OF LIBRARY",
+        "Google Maps Name",
+        "place_id",
+        "latitude",
+        "longitude",
+        "library_service",
+    ]
 )
 if not selected_library_geocoding_df.empty:
     edited_selected_library_geocoding_df = st.data_editor(

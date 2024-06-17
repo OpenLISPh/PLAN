@@ -5,10 +5,10 @@ import pandas as pd
 from geopy.distance import geodesic, great_circle
 
 
-def get_service_to_population_ratio(population, collection_size):
+def get_service_to_population_ratio(population, library_service):
     if population == 0:
         return 0
-    return collection_size / population
+    return library_service / population
 
 
 def calculate_library_catchment_areas(
@@ -25,8 +25,8 @@ def calculate_library_catchment_areas(
     catchment_areas = []
     # Iterate over each library to calculate its catchment area
     for _, lib in libraries_df.iterrows():
-        logging.info(f"Calculating catchment for {lib[libraries_name_col]}")
-        logging.info(f"Collection Size: {lib['collection_size']}")
+        # logging.info(f"Calculating catchment for {lib[libraries_name_col]}")
+        # logging.info(f"Library service: {lib['library_service']}")
         lib_coord = (lib["latitude"], lib["longitude"])
         raw_catchment_population = 0
         weighted_catchment_population = 0
@@ -47,14 +47,14 @@ def calculate_library_catchment_areas(
             {
                 "id": lib["id"],
                 f"{libraries_name_col}": lib[libraries_name_col],
-                "collection_size": lib["collection_size"],
+                "library_service": lib["library_service"],
                 "Raw Catchment Population": raw_catchment_population,
                 # "Service to Population Ratio": get_service_to_population_ratio(
-                #     raw_catchment_population, lib["collection_size"]
+                #     raw_catchment_population, lib["library_service"]
                 # ),
                 "Weighted Catchment Population": weighted_catchment_population,
                 "Service to Population Ratio": get_service_to_population_ratio(
-                    weighted_catchment_population, lib["collection_size"]
+                    weighted_catchment_population, lib["library_service"]
                 ),
                 "Catchment Barangays": catchment_barangays,
             }
